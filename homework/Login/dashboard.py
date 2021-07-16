@@ -4,9 +4,9 @@ import main
 import csv
 
 def main():
-    print '-----------------------------'
-    print 'Dashboard'
-    print '-----------------------------'
+    print('-----------------------------')
+    print('Dashboard')
+    print('-----------------------------')
     check = input('Do you want to see all users:')
     if check == 'yes' or 'Yes':
         new.see_all()

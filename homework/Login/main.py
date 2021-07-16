@@ -62,9 +62,9 @@ class user:
         return list_all
 
 def main():
-    print '-----------------------------'
-    print 'Welcome'
-    print '-----------------------------'
+    # print('-----------------------------')
+    # print ('Welcome')
+    # print ('-----------------------------')
     first = input('Do you want to register: ')
     if first == 'yes' or 'Yes':
         register.main()
