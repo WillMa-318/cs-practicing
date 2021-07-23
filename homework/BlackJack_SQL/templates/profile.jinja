@@ -1,0 +1,61 @@
+{% extends 'base.jinja' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+    <div class = "container mt-3">
+        <form method='post'>
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button {{b1}}" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Deposit or withdraw money
+                    </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse {{c1}}" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <p>Your current money ${{money}}</p>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Amount" name = "amount">
+                                <input type = "submit" class="btn btn-outline-secondary" type="button" value = "Deposit" id = "deposit" name = "deposit">
+                                <input type = "submit" class="btn btn-outline-secondary" type="button" value = "Withdraw" id = "withdraw" name = "withdraw">
+                            </div>
+                            <p class="text-body mt-3">{{messages_1}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingTwo">
+                    <button class="accordion-button {{b2}}" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        Change password
+                    </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse {{c2}}" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <div class="row mb-3">
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Current Password</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="o_password" name = "o_password">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">New Password</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="n_password" name = "n_password">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Confirm New Password</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="c_password" name = "c_password">
+                                </div>
+                            </div>
+                            <input type="submit" class="btn btn-primary" value = 'Make Change' id = "change" name = "change">
+                            <p class="text-body mt-3">{{messages_2}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

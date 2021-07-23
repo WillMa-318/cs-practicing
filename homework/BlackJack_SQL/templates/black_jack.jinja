@@ -1,0 +1,34 @@
+{% extends 'base.jinja' %}
+
+{% block title %}Blackjack{% endblock %}
+
+{% block body %}
+    
+    <div class = "container mt-4" style = 'overfloat:hidden; hight:30%'>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">you have ${{money}}</li>
+            <li class="list-group-item">sum of cards {{sum_card}}</li>
+            <li class="list-group-item">
+                {%if messages%}
+                    <p>{{messages}} ${{l_money}}<p>
+                {%else%}
+                    <p>Welcome to the game</p>
+                {%endif%}
+            </li>
+        </ul>
+    </div>
+    <div class = "container">
+        {%for card in show%}
+            <img src = "{{url_for('static', filename = 'img/' + card + '.png')}}" style = 'width:10%; margin-right:5px'>
+        {%endfor%}
+        <img src = "{{url_for('static', filename = 'img/blank.png')}}" style = 'width:10%'>
+    </div>
+    <div class = 'container mt-3'>
+        <form method='post'>
+            <input type="submit" class="btn btn-primary" value = 'Get Card' name = 'get_card'>
+        </form>
+        <form method='post'>
+            <input type="submit" class="btn btn-primary" value = 'Stop' name = 'stop' id = 'stop'>
+        </form>
+    </div>
+{% endblock %}
