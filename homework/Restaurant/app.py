@@ -183,7 +183,10 @@ def create_r():
 def edit(id):
     if (not session.get('user')):
         return redirect(url_for('index'))
+    user = User.query.filter_by(username = session.get('user')[0]).first()
     res = Restaurant.query.filter_by(id = id).first()
+    if not res in user.restaurants:
+        return redirect(url_for('profile'))
     if request.method == 'POST':
         if request.form.get("add_di"):
             name = request.form.get('name')
