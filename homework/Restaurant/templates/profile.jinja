@@ -3,35 +3,31 @@
 {% block title %}Profile{% endblock %}
 
 {% block body %}
-    <div class = "container mt-3">
+    <div class = "container">
         <div class="row">
             {% for each in user.restaurants%}
-                <div class = "col-4">
-                    <form method='post'>
-                        <div class="card" style="width: 18rem;">
-                            <img src = "{{url_for('static', filename = 'img/rest_default.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">{{each.name}}</h5>
-                                <p class="card-text">{{each.description}}</p>
-                                <input type="hidden" id = "name" name = "name" value = "each.id">
-                                <input type="submit" class="btn btn-outline-dark" value = "Edit">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            {%endfor%}
-            <div class = "col-4">
-                <form method='post'>
-                    <div class="card" style="width: 18rem;">
+                <div class = "col-3">
+                    <div class="card mx-auto mt-3" style="width: 95%">
                         <img src = "{{url_for('static', filename = 'img/rest_default.png')}}" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">New</h5>
-                            <p class="card-text">New</p>
-                            <input type="hidden" id = "name" name = "name" value = "create_new_res">
-                            <input type="submit" class="btn btn-outline-dark" value = "Add New">
+                            <h5 class="card-title">{{each.name}}</h5>
+                            <p class="card-text">{{each.description}}</p>
+                            <input type="hidden" id = "name" name = "name" value = "each.id">
+                            <a class="btn btn-outline-dark" href = "{{url_for('edit', id = each.id)}}">Edit</a>
                         </div>
                     </div>
-                </form>
+                </div>
+            {%endfor%}
+            <div class = "col-3">
+                <div class="card mx-auto mt-3" style="width: 95%">
+                    <img src = "{{url_for('static', filename = 'img/rest_default.png')}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">New</h5>
+                        <p class="card-text">New</p>
+                        <input type="hidden" id = "name" name = "name" value = "create_new_res">
+                        <a class="btn btn-outline-dark" href = "{{url_for('create_r')}}">Add New</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

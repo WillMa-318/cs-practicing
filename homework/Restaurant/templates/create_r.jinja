@@ -3,5 +3,40 @@
 {% block title %}Create New Restaurant{% endblock %}
 
 {% block body %}
-    
+    <div class="container">
+        <form method='post'>
+            <div class="row mb-3 mt-3">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="name" name = 'name'>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Address</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="address" name = "address">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Phone</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="phone" name = "phone">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Category</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="category" name = "category">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="description" name = "description">
+                </div>
+            </div>
+            <input type="submit" class="btn btn-primary" value = 'Create' name = 'btn'>
+                <p class="text-body mt-3">{{messages}}</p>
+        </form>
+    </div>
 {% endblock %}

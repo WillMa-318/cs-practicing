@@ -45,6 +45,11 @@ class Menu(db.Model):
     isdish = db.Column(db.Boolean, nullable = False)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
 
+    def __str__(self):
+        return self.name
+    def __repr__(self):
+        return self.name
+
 
 
 
@@ -52,6 +57,29 @@ class Menu(db.Model):
 def user_list(user):
     return [user.username, user.password, user.firstname, user.lastname]
 
+def res_list(res):
+    return [res.name, res.phone, res.description, res.category, res.address]
+
+def menu_list(menu):
+    return [menu.name, menu.price, menu.description, menu.category, menu.isdish]
+
+def check_password(password):
+    digit = '1234567890'
+    low = 'qwertyuiopasdfghjklzxcvbnm'
+    up = 'QWERTYUIOPASDFGHJKLZXCVBNM'
+    check1 = False
+    check2 = False
+    check3 = False
+    for i in password:
+        if i in digit:
+            check1 = True
+        if i in low:
+            check2 = True
+        if i in up:
+            check3 = True
+    if check1 == False or check2 == False or check3 == False:
+        return False
+    return True
     
 
 
@@ -66,7 +94,9 @@ def page_not_found(e):
 
 @app.route('/')
 def index():
-    return render_template('index.jinja')
+    res = Restaurant.query.all()
+    print(res)
+    return render_template('index.jinja', res = res)
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -102,14 +132,15 @@ def register():
                 return render_template('register.jinja', messages = "Please fill in all the information")
         if not User.query.filter_by(username = username).first() == None:
             return render_template('register.jinja', messages = "Username already exist")
+        if i_password == c_password:
+            if check_password(i_password) == False:
+                return render_template('register.jinja', messages = "The password is weak")
+            db.session.add(user)
+            db.session.commit()
+            print (User.query.all())
+            return redirect(url_for('login'))
         else:
-            if i_password == c_password:
-                db.session.add(user)
-                db.session.commit()
-                print (User.query.all())
-                return redirect(url_for('login'))
-            else:
-                return render_template('register.jinja', messages = "Password not match")
+            return render_template('register.jinja', messages = "Password not match")
         
     return render_template('register.jinja')
 
@@ -118,16 +149,6 @@ def profile():
     if (not session.get('user')):
         return redirect(url_for('index'))
     user = User.query.filter_by(username = session.get('user')[0]).first()
-    if (request.method == 'POST'):
-        id_ = request.form.get('name')
-        for each in user.restaurants:
-            if each.id == id_:
-                restaurant_id = each.id
-        if id_ == 'create_new_res':
-            return redirect(url_for('create_r'))
-        else:
-            print(restaurant_id)
-            return redirect(url_for('edit'), id = restaurant_id)
     return render_template('profile.jinja', user = user)
 
 
@@ -136,14 +157,76 @@ def create_r():
     if (not session.get('user')):
         return redirect(url_for('index'))
     user = User.query.filter_by(username = session.get('user')[0]).first()
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        phone = request.form.get('phone')
+        address = request.form.get('address')
+        category = request.form.get('category')
+        description = request.form.get('description')
+        restaurant = Restaurant(name = name, phone = phone, category = category, description = description, address = address)
+        r_list = res_list(restaurant)
+        for each in r_list:
+            if(each == ''):
+                return render_template('register.jinja', messages = "Please fill in all the information")
+        if not Restaurant.query.filter_by(address = address).first() == None:
+            return render_template('register.jinja', messages = "Res already exist")
+        else:
+            user.restaurants.append(restaurant)
+            db.session.commit()
+            print (User.query.all())
+            return redirect(url_for('profile'))
+
     return render_template('create_r.jinja')
 
 @app.route('/profile/<id>', methods = ['GET', 'POST'])
 def edit(id):
     if (not session.get('user')):
         return redirect(url_for('index'))
-    user = User.query.filter_by(username = session.get('user')[0]).first()
-    return render_template('edit.jinja')
+    res = Restaurant.query.filter_by(id = id).first()
+    if request.method == 'POST':
+        if request.form.get("add_di"):
+            name = request.form.get('name')
+            description = request.form.get('description')
+            price_t = request.form.get('price')
+            price = float(price_t)
+            new_dish = Menu(name = name, price = price, description = description, isdish = True, category = 'none')
+            m_list = menu_list(new_dish)
+            print('a')
+            for each in m_list:
+                if(each == ''):
+                    print('error')
+                    return redirect(url_for('edit', id = id, res = res))
+            res.menu.append(new_dish)
+            db.session.commit()
+            print(res.menu)
+            return redirect(url_for('edit', id = id, res = res))
+        
+        if request.form.get("add_dr"):
+            name = request.form.get('name')
+            description = request.form.get('description')
+            price_t = request.form.get('price')
+            price = float(price_t)
+            new_dish = Menu(name = name, price = price, description = description, isdish = False, category = 'none')
+            m_list = menu_list(new_dish)
+            for each in m_list:
+                if(each == ''):
+                    return redirect(url_for('edit', id = id, res = res))
+            res.menu.append(new_dish)
+            db.session.commit()
+            return redirect(url_for('edit', id = id, res = res))
+    return render_template('edit.jinja', id = id, res = res)
+
+
+    return render_template('edit.jinja', res = res)
+
+@app.route('/view/<id>', methods = ['GET', 'POST'])
+def view(id):
+    if (not session.get('user')):
+        return redirect(url_for('index'))
+    res = Restaurant.query.filter_by(id = id).first()
+    print(id)
+    return render_template('view.jinja', res = res, id = id)
     
 @app.route('/logout')
 def logout():

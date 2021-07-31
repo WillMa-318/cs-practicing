@@ -1,0 +1,84 @@
+{% extends 'base.jinja' %}
+
+{% block title %}{{res.name}}{% endblock %}
+
+{% block body %}
+    <div class = "container">
+        <div class = "row mt-3">
+            <div class = "col-4">
+                <img src = "{{url_for('static', filename = 'img/rest_default.png')}}" class="img-thumbnail" alt="..." style="width: 100%">
+            </div>
+            <div class = 'col-8'>
+                <p>Name: {{res.name}}</p>
+                <p>Phone: +1 {{res.phone}}</p>
+                <p>Address: {{res.address}}</p>
+                <p>Category: {{res.category}}</p>
+                <p>Description: {{res.description}}</p>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class = "container">
+        <div class = "row mt-3">
+            <div class = "col-2">
+                <nav id="navbar-example3" class="navbar navbar-light bg-light flex-column align-items-stretch p-3">
+                    <a class="navbar-brand" href="#">Menu</a>
+                    <nav class="nav nav-pills flex-column">
+                    <a class="nav-link" href="#dish">Dish</a>
+                    {# <nav class="nav nav-pills flex-column">
+                    <a class="nav-link ms-3 my-1" href="#item-1-1">Item 1-1</a>
+                    <a class="nav-link ms-3 my-1" href="#item-1-2">Item 1-2</a>
+                    </nav> #}
+                    <a class="nav-link" href="#drink">Drink</a>
+                    {# <nav class="nav nav-pills flex-column">
+                    <a class="nav-link ms-3 my-1" href="#item-3-1">Item 3-1</a>
+                    <a class="nav-link ms-3 my-1" href="#item-3-2">Item 3-2</a>
+                    </nav> #}
+                    </nav>
+                </nav>
+            </div>
+        
+            <div class = "col-10">
+                <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">
+                    <h4 id="dish" class="mt-3">Dish</h4>
+                    {% for each in res.menu%}
+                        {% if each.isdish == True %}
+                            <div class = "col-3">
+                                <div class="card mx-auto mt-3" style="width: 95%">
+                                    <img src = "{{url_for('static', filename = 'img/dish_default.jpg')}}" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{each.name}}</h5>
+                                        <p class="card-text">$ {{each.price}}</p>
+                                        <input type="hidden" id = "name" name = "name" value = "each.id">
+                                    </div>
+                                </div>
+                            </div>
+                        {%endif%}
+                    {%endfor%}
+
+                    <h4 id="drink">Drink</h4>
+                    {% for each in res.menu%}
+                        {% if each.isdish == False %}
+                            <div class = "col-3">
+                                <div class="card mx-auto mt-3" style="width: 95%">
+                                    <img src = "{{url_for('static', filename = 'img/drink_default.jpg')}}" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{each.name}}</h5>
+                                        <p class="card-text">$ {{each.price}}</p>
+                                        <input type="hidden" id = "name" name = "name" value = "each.id">
+                                    </div>
+                                </div>
+                            </div>
+                        {%endif%}
+                    {%endfor%}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

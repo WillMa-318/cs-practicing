@@ -3,5 +3,21 @@
 {% block title %}Restaurant Home{% endblock %}
 
 {% block body %}
-    
+    <div class = "container">
+        <div class="row">
+            {% for each in res %}
+                <div class = "col-3">
+                    <div class="card mx-auto mt-3" style="width: 95%">
+                        <img src = "{{url_for('static', filename = 'img/rest_default.png')}}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">{{each.name}}</h5>
+                            <p class="card-text">{{each.description}}</p>
+                            <input type="hidden" id = "name" name = "name" value = "each.id">
+                            <a class="btn btn-outline-dark" href = "{{url_for('view', id = each.id)}}">View</a>
+                        </div>
+                    </div>
+                </div>
+            {%endfor%}
+        </div>
+    </div>
 {% endblock %}
