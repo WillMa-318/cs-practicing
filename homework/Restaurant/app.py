@@ -16,9 +16,9 @@ class User(db.Model):
     lastname = db.Column(db.String(40), nullable=False)
     restaurants = db.relationship('Restaurant', backref='user')
     def __str__(self):
-        return 'Username: {}, Password: {}, Firstname: {}, Lastname: {}'.format(self.username, self.password, self.firstname, self.lastname)
+        return 'Username: {}, Password: {}, Firstname: {}, Lastname: {} ||'.format(self.username, self.password, self.firstname, self.lastname)
     def __repr__(self):
-        return 'Username: {}, Password: {}, Firstname: {}, Lastname: {}'.format(self.username, self.password, self.firstname, self.lastname)
+        return 'Username: {}, Password: {}, Firstname: {}, Lastname: {} ||'.format(self.username, self.password, self.firstname, self.lastname)
 
 class Restaurant(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -35,6 +35,9 @@ class Restaurant(db.Model):
     def __repr__(self):
         return self.name
 
+    # def append_by_cate():
+
+
 
 class Menu(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -46,10 +49,9 @@ class Menu(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
 
     def __str__(self):
-        return self.name
+        return '{} {} {}, '.format(self.name, self.category, self.isdish)
     def __repr__(self):
-        return self.name
-
+        return '{} {} {}, '.format(self.name, self.category, self.isdish)
 
 
 
@@ -80,6 +82,9 @@ def check_password(password):
     if check1 == False or check2 == False or check3 == False:
         return False
     return True
+
+
+
     
 
 
@@ -168,9 +173,9 @@ def create_r():
         r_list = res_list(restaurant)
         for each in r_list:
             if(each == ''):
-                return render_template('register.jinja', messages = "Please fill in all the information")
+                return render_template('create_r.jinja', messages = "Please fill in all the information")
         if not Restaurant.query.filter_by(address = address).first() == None:
-            return render_template('register.jinja', messages = "Res already exist")
+            return render_template('create_r.jinja', messages = "Restaurant already exist")
         else:
             user.restaurants.append(restaurant)
             db.session.commit()
@@ -185,48 +190,74 @@ def edit(id):
         return redirect(url_for('index'))
     user = User.query.filter_by(username = session.get('user')[0]).first()
     res = Restaurant.query.filter_by(id = id).first()
+    if len(res.menu)==0:
+        check = False
+    else:
+        check = True
     if not res in user.restaurants:
         return redirect(url_for('profile'))
+    # all_di_cate = 
     if request.method == 'POST':
         if request.form.get("add_di"):
             name = request.form.get('name')
             description = request.form.get('description')
             price_t = request.form.get('price')
             price = float(price_t)
-            new_dish = Menu(name = name, price = price, description = description, isdish = True, category = 'none')
+            category = request.form.get('type')
+            new_dish = Menu(name = name, price = price, description = description, isdish = True, category = category)
             m_list = menu_list(new_dish)
             print('a')
             for each in m_list:
                 if(each == ''):
                     print('error')
-                    return redirect(url_for('edit', id = id, res = res))
+                    return redirect(url_for('edit', id = id, res = res, check = check))
+            if not Menu.query.filter_by(name = name).first() == None:
+                return redirect(url_for('edit', id = id, res = res, check = check))
             res.menu.append(new_dish)
             db.session.commit()
             print(res.menu)
-            return redirect(url_for('edit', id = id, res = res))
+            return redirect(url_for('edit', id = id, res = res, check = check))
         
         if request.form.get("add_dr"):
             name = request.form.get('name')
             description = request.form.get('description')
             price_t = request.form.get('price')
             price = float(price_t)
-            new_dish = Menu(name = name, price = price, description = description, isdish = False, category = 'none')
+            category = request.form.get('type')
+            new_dish = Menu(name = name, price = price, description = description, isdish = False, category = category)
             m_list = menu_list(new_dish)
             for each in m_list:
                 if(each == ''):
-                    return redirect(url_for('edit', id = id, res = res))
+                    return redirect(url_for('edit', id = id, res = res, check = check))
+            if not Menu.query.filter_by(name = name).first() == None:
+                return redirect(url_for('edit', id = id, res = res, check = check))
             res.menu.append(new_dish)
             db.session.commit()
-            return redirect(url_for('edit', id = id, res = res))
-    return render_template('edit.jinja', id = id, res = res)
+            return redirect(url_for('edit', id = id, res = res, check = check))
+
+        if request.form.get("add_cate"):
+            name = request.form.get('name')
+            type_ = request.form.get('type')
+            if type_ == 'none':
+                print('not fill in')
+                return redirect(url_for('edit', id = id, res = res, check = check))
+            for each in res.menu:
+                if each.category == name:
+                    print('same')
+                    return redirect(url_for('edit', id = id, res = res, check = check))
+            if type_ == 'dish':
+                isdish = True
+            else:
+                isdish = False
+            new_cate = Menu(name = "new category created", price = 0, description = '0', isdish = isdish, category = name)
+            res.menu.append(new_cate)
+            db.session.commit()
+    return render_template('edit.jinja', id = id, res = res, check = check)
 
 
-    return render_template('edit.jinja', res = res)
 
 @app.route('/view/<id>', methods = ['GET', 'POST'])
 def view(id):
-    if (not session.get('user')):
-        return redirect(url_for('index'))
     res = Restaurant.query.filter_by(id = id).first()
     print(id)
     return render_template('view.jinja', res = res, id = id)
@@ -251,5 +282,6 @@ if __name__ == "__main__":
     # user.restaurants.append(new_r)
     # db.session.commit()
     # print (user.restaurants)
-
+    
+    # print(User.query.all())
 
