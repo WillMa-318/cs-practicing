@@ -19,10 +19,12 @@
     </div>
     <hr>
 
+    {# <div class = "container overflow-scroll" style = "width:100%; height:700px;"> #}
     <div class = "container">
-        <div class = "row mt-3">
-            <div class = "col-2">
-                <nav id="navbar-example3" class="navbar navbar-light bg-light flex-column align-items-stretch p-3 nav-active">
+        <div class = "row mt-3 overflow-scroll" style = "width:100%; height:700px;">
+        {# <div class = "row mt-3"> #}
+            <div class = "col-2 position-sticky">
+                <nav id="navbar-example3" class="navbar navbar-light bg-light flex-column align-items-stretch p-3">
                     <a class="navbar-brand" href="#">Menu</a>
                     <nav class="nav nav-pills flex-column">
                         <a class="nav-link " href="#dish_">Dish</a>
@@ -65,31 +67,37 @@
                                 {%for item in res.menu%}
                                     {% if item.category == each.category and item.name != 'new category created'%}
                                         <div class = "col-3">
-                                            <div class="card mx-auto mt-3" style="width: 95%">
-                                                <img src = "{{url_for('static', filename = 'img/dish_default.jpg')}}" class="card-img-top" alt="...">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{item.name}}</h5>
-                                                    <p class="card-text">$ {{item.price}}</p>
-                                                    <input type="hidden" id = "name" name = "name" value = "{item.id}">
+                                            <a data-bs-toggle="modal" data-bs-target="#d{{item.id}}" href="#d{{item.id}}" class="text-decoration-none text-dark">
+                                                <div class="card mx-auto mt-3" style="width: 95%">
+                                                    <img src = "{{url_for('static', filename = 'img/dish_default.jpg')}}" class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">{{item.name}}</h5>
+                                                        <p class="card-text">$ {{item.price}}</p>
+                                                        <input type="hidden" id = "name" name = "name" value = "{item.id}">
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </a>
                                         </div>
                                     {%endif%}
                                 {%endfor%}
                             {%endif%}
                         {%endfor%}
-                        <h4 id="other-di">other</h4>
+                        {%if check == True%}
+                            <h4 id="other-di">other</h4>
+                        {%endif%}
                         {%for each in res.menu%}
                             {%if each.category == 'other' and each.isdish == True%}
                                 <div class = "col-3">
-                                    <div class="card mx-auto mt-3" style="width: 95%">
-                                        <img src = "{{url_for('static', filename = 'img/dish_default.jpg')}}" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{each.name}}</h5>
-                                            <p class="card-text">$ {{each.price}}</p>
-                                            <input type="hidden" id = "name" name = "name" value = "{{each.id}}">
+                                    <a data-bs-toggle="modal" data-bs-target="#d{{each.id}}" href="#d{{each.id}}" class="text-decoration-none text-dark">
+                                        <div class="card mx-auto mt-3" style="width: 95%">
+                                            <img src = "{{url_for('static', filename = 'img/dish_default.jpg')}}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{each.name}}</h5>
+                                                <p class="card-text">$ {{each.price}}</p>
+                                                <input type="hidden" id = "name" name = "name" value = "{{each.id}}">
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             {%endif%}
                         {%endfor%}
@@ -108,31 +116,37 @@
                                 {%for item in res.menu%}
                                     {% if item.category == each.category and item.name != 'new category created'%}
                                         <div class = "col-3">
-                                            <div class="card mx-auto mt-3" style="width: 95%">
-                                                <img src = "{{url_for('static', filename = 'img/dish_default.jpg')}}" class="card-img-top" alt="...">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{item.name}}</h5>
-                                                    <p class="card-text">$ {{item.price}}</p>
-                                                    <input type="hidden" id = "name" name = "name" value = "{{item.id}}">
+                                            <a data-bs-toggle="modal" data-bs-target="#d{{item.id}}" href="#d{{item.id}}" class="text-decoration-none text-dark">
+                                                <div class="card mx-auto mt-3" style="width: 95%">
+                                                    <img src = "{{url_for('static', filename = 'img/dish_default.jpg')}}" class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">{{item.name}}</h5>
+                                                        <p class="card-text">$ {{item.price}}</p>
+                                                        <input type="hidden" id = "name" name = "name" value = "{{item.id}}">
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </a>
                                         </div>
                                     {%endif%}
                                 {%endfor%}
                             {%endif%}
                         {%endfor%}
-                        <h4 id="other-di">other</h4>
+                        {%if check == True%}
+                            <h4 id="other-di">other</h4>
+                        {%endif%}
                         {%for each in res.menu%}
                             {%if each.category == 'other' and each.isdish == False%}
                                 <div class = "col-3">
-                                    <div class="card mx-auto mt-3" style="width: 95%">
-                                        <img src = "{{url_for('static', filename = 'img/dish_default.jpg')}}" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{each.name}}</h5>
-                                            <p class="card-text">$ {{each.price}}</p>
-                                            <input type="hidden" id = "name" name = "name" value = "{{each.id}}">
+                                    <a data-bs-toggle="modal" data-bs-target="#d{{each.id}}" href="#d{{each.id}}" class="text-decoration-none text-dark">
+                                        <div class="card mx-auto mt-3" style="width: 95%">
+                                            <img src = "{{url_for('static', filename = 'img/dish_default.jpg')}}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{each.name}}</h5>
+                                                <p class="card-text">$ {{each.price}}</p>
+                                                <input type="hidden" id = "name" name = "name" value = "{{each.id}}">
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             {%endif%}
                         {%endfor%}
@@ -162,19 +176,19 @@
                     <div class="row mb-3 mt-3">
                         <label for="inputEmail3" class="col-sm-2 col-form-label">name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" name = 'name'>
+                            <input type="text" class="form-control" id="name" name = 'name' required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputPassword3" class="col-sm-2 col-form-label">description</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="description" name = "description">
+                            <input type="text" class="form-control" id="description" name = "description" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputPassword3" class="col-sm-2 col-form-label">price</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control" id="price" name = "price">
+                            <input type="number" class="form-control" id="price" name = "price" required>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -214,19 +228,19 @@
                     <div class="row mb-3 mt-3">
                         <label for="inputEmail3" class="col-sm-2 col-form-label">name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" name = 'name'>
+                            <input type="text" class="form-control" id="name" name = 'name' required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputPassword3" class="col-sm-2 col-form-label">description</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="description" name = "description">
+                            <input type="text" class="form-control" id="description" name = "description" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputPassword3" class="col-sm-2 col-form-label">price</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control" id="price" name = "price">
+                            <input type="number" class="form-control" id="price" name = "price"required>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -266,7 +280,7 @@
                     <div class="row mb-3 mt-3">
                         <label for="inputEmail3" class="col-sm-2 col-form-label">name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" name = 'name'>
+                            <input type="text" class="form-control" id="name" name = 'name' required>
                         </div>
                     </div>
                     <select class="form-select" aria-label="Default select example" id="type" name="type">
@@ -285,6 +299,65 @@
             </div>
         </form>
     </div>
+    {%for each in res.menu%}
+    <div class="modal fade" id="d{{each.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <form method='post'>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Edit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row mb-3 mt-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="name" name = 'name' value = '{{each.name}}' required>
+                            <input type="hidden" id="id_" name = 'id_' value = '{{each.id}}'>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">description</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="description" name = "description" value = "{{each.description}}" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">price</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="price" name = "price" value = "{{each.price}}"required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">category</label>
+                        <div class="col-sm-10">
+                            <select class="form-select" aria-label="Default select example" id="type" name="type">
+                                <option selected value="{{each.category}}">{{each.category}}</option>
+                                {%for item in res.menu%}
+                                    {%if item.name == 'new category created' and item.isdish == each.isdish and item.category != each.category%}
+                                        <option value="{{item.category}}">{{item.category}}</option>
+                                    {%endif%}
+                                {%endfor%}
+                                {%if each.category != 'other'%}
+                                    <option value="other">other</option>
+                                {%endif%}
+                            </select>
+                        </div>
+                    </div>
+                    
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-primary" id="delete" name="delete" value="Delete">
+                    <input type="submit" class="btn btn-primary" id="edit_" name="edit_" value="Edit">
+                </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {%endfor%}
 
 
 

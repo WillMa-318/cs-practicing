@@ -49,9 +49,9 @@ class Menu(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
 
     def __str__(self):
-        return '{} {} {}, '.format(self.name, self.category, self.isdish)
+        return 'n:{} c:{} p:{} d:{}, '.format(self.name, self.category, self.isdish, self.description)
     def __repr__(self):
-        return '{} {} {}, '.format(self.name, self.category, self.isdish)
+        return 'n:{} c:{} p:{} d:{}, '.format(self.name, self.category, self.isdish, self.description)
 
 
 
@@ -211,8 +211,9 @@ def edit(id):
                 if(each == ''):
                     print('error')
                     return redirect(url_for('edit', id = id, res = res, check = check))
-            if not Menu.query.filter_by(name = name).first() == None:
-                return redirect(url_for('edit', id = id, res = res, check = check))
+            for each in res.menu:
+                if each.name == name:
+                    return redirect(url_for('edit', id = id, res = res, check = check))
             res.menu.append(new_dish)
             db.session.commit()
             print(res.menu)
@@ -229,8 +230,9 @@ def edit(id):
             for each in m_list:
                 if(each == ''):
                     return redirect(url_for('edit', id = id, res = res, check = check))
-            if not Menu.query.filter_by(name = name).first() == None:
-                return redirect(url_for('edit', id = id, res = res, check = check))
+            for each in res.menu:
+                if each.name == name:
+                    return redirect(url_for('edit', id = id, res = res, check = check))
             res.menu.append(new_dish)
             db.session.commit()
             return redirect(url_for('edit', id = id, res = res, check = check))
@@ -252,6 +254,36 @@ def edit(id):
             new_cate = Menu(name = "new category created", price = 0, description = '0', isdish = isdish, category = name)
             res.menu.append(new_cate)
             db.session.commit()
+
+        if request.form.get("edit_"):
+            print('edit')
+            name = request.form.get('name')
+            category = request.form.get('type')
+            price_t = request.form.get('price')
+            price = float(price_t)
+            description = request.form.get('description')
+            id_ = int(request.form.get('id_'))
+            menu = Menu.query.filter_by(id = id_).first()
+            menu.name = name
+            menu.description = description
+            menu.price = price
+            menu.category = category
+            db.session.commit()
+            
+            return redirect(url_for('edit', id = id, res = res, check = check))
+
+
+        if request.form.get('delete'):
+            print('delete')
+            id_ = int(request.form.get('id_'))
+            print(id_)
+            menu = Menu.query.filter_by(id = id_).first()
+            print(menu)
+            db.session.delete(menu)
+            db.session.commit()
+            return redirect(url_for('edit', id = id, res = res, check = check))
+
+
     return render_template('edit.jinja', id = id, res = res, check = check)
 
 

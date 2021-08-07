@@ -11,7 +11,10 @@
                         <img src = "{{url_for('static', filename = 'img/rest_default.png')}}" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title">{{each.name}}</h5>
-                            <p class="card-text">{{each.description}}</p>
+                            <div class="overflow-hidden mb-3" style="width:100%; height:23px">
+                                <p class="card-text">{{each.description}}</p>
+                            </div>
+                            
                             <input type="hidden" id = "name" name = "name" value = "each.id">
                             <a class="btn btn-outline-dark" href = "{{url_for('view', id = each.id)}}">View</a>
                         </div>
